@@ -4,23 +4,24 @@ import java.io.IOException;
 public class GitTest {
     public static void main(String[] args) throws IOException {
         for (int i = 0; i < 3; i++) {
-            System.out.println("Running Tests: " + (i + 1));
-            runTest();
+            System.out.println("Test Iteration: " + (i + 1));
+            runGitTest();
             System.out.println();
         }
     }
-
-    private static void runTest() throws IOException {
+    private static void runGitTest() throws IOException {
         Git.deleteGit();
         Git git = new Git();
+
+        // Check if initialization succeeded
         if (checkInitialization()) {
-            System.out.println("Test Passed: All files and directories are present.");
+            System.out.println("Initialization Test Passed.");
         } else {
-            System.out.println("Test Failed: Missing files or directories.");
+            System.out.println("Initialization Test Failed.");
         }
+
         Git.deleteGit();
     }
-
     private static boolean checkInitialization() {
         String gitPath = "./git";
         String objectsDirectoryPath = gitPath + "/objects";

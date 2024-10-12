@@ -7,27 +7,28 @@ public class BlobTest {
     public static void main(String[] args) {
         try {
             for (int i = 0; i < 3; i++) {
-                System.out.println("Running Test: " + (i + 1));
-                runTest("testFile.txt");
+                System.out.println("Blob Test Iteration: " + (i + 1));
+                runBlobTest("testFile.txt");
                 System.out.println();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    private static void runTest(String filePath) throws IOException {
+    private static void runBlobTest(String filePath) throws IOException {
         Git.deleteGit();
         Git git = new Git();
+        // Create a sample file
         File testFile = new File(filePath);
         if (!testFile.exists()) {
-            testFile.createNewFile();
+            if (testFile.createNewFile()) {
+                System.out.println("Created test file for blob creation.");
+            }
         }
-        Blob.createBlob(filePath);
         if (checkBlobCreation(filePath)) {
-            System.out.println("Test Passed: Files and index entries are present.");
+            System.out.println("Blob Creation Test Passed.");
         } else {
-            System.out.println("Test Failed: Missing files or index entries.");
+            System.out.println("Blob Creation Test Failed.");
         }
         testFile.delete();
         Git.deleteGit();
@@ -36,7 +37,6 @@ public class BlobTest {
         try {
             File indexFile = new File("git/index");
             if (!indexFile.exists()) {
-                System.out.println("Index file does not exist.");
                 return false;
             }
             BufferedReader reader = new BufferedReader(new FileReader(indexFile));
@@ -48,18 +48,12 @@ public class BlobTest {
                     break;
                 }
             }
-            reader.close();
+            reader.close()
             if (!entryFound) {
-                System.out.println("Blob entry not found in index file.");
                 return false;
             }
             File objectsDir = new File("git/objects");
-            if (!objectsDir.exists() || Objects.requireNonNull(objectsDir.listFiles()).length == 0) {
-                System.out.println("No blob file found in objects directory.");
-                return false;
-            }
-
-            return true;
+            return objectsDir.exists() && Objects.requireNonNull(objectsDir.listFiles()).length > 0;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
