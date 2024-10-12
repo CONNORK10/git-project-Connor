@@ -19,17 +19,6 @@ public class Git {
     // 1. **Create** an `objects` directory ***inside*** the `git` directory if it doesn't exist
     // 2. **Create** a file named `index` ***inside*** the `git` directory if it doesn't exist 
     //      (Note: it is NOT .txt it is simply called ‘index’)
-
-    public static void main(String[] args) throws IOException {
-        deleteGit();
-        Git git = new Git();
-
-        Blob.createBlob("test");
-    }
-
-    public Git() throws IOException{
-        this.initialize();;
-    }
     
     public void initialize() throws IOException{
         // Define paths for .git, objects directory, and index file
@@ -53,30 +42,5 @@ public class Git {
                 indexFile.createNewFile();
             }
         }   
-    }
-
-    // deletes git folder and all files inside
-    public static void deleteGit() {
-        deleteFolder("git");
-    }
-
-    private static void deleteFolder(String path) {
-        File folder = new File(path);
-        if (!folder.exists()) {
-            return;
-        }
-        // creates a list of all filenames inside git
-        File[] toDelete = folder.listFiles();
-
-        // recursively deletes all files in git directory
-        for (File file : toDelete) {
-            if(file.isDirectory()){
-                deleteFolder(file.getPath());
-            }
-            file.delete();
-        }
-
-        // once empty, the directory is emptied
-        folder.delete();
     }
 }
