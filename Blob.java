@@ -4,10 +4,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Objects;
 
 public class Blob {
     public static String Sha1Hash(File file) {
+    // https://www.geeksforgeeks.org/sha-1-hash-in-java/
         try {
             MessageDigest digester = MessageDigest.getInstance("SHA-1");
             byte[] sha1bytes = digester.digest(Files.readAllBytes(file.toPath()));
@@ -24,6 +24,7 @@ public class Blob {
     }
 
     public static void createBlob(String filePath) throws IOException {
+    // Creates a blob and stores the file in the objects directory
         File originalFile = new File(filePath);
         if (!originalFile.exists()) {
             throw new FileNotFoundException("File not found: " + filePath);
@@ -49,7 +50,7 @@ public class Blob {
             throw new IOException("Failed to create index file.");
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(indexFile, true))) {
-            writer.write("blob " + sha1Hash + " " + originalFilePath);
+            writer.write(sha1Hash + " " + originalFileName);
             writer.newLine();
         }
     }
