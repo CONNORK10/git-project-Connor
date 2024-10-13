@@ -1,13 +1,11 @@
 import java.io.*;
 import java.math.BigInteger;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class Blob {
     public static String Sha1Hash(File file) {
-    // https://www.geeksforgeeks.org/sha-1-hash-in-java/
         try {
             MessageDigest digester = MessageDigest.getInstance("SHA-1");
             byte[] sha1bytes = digester.digest(Files.readAllBytes(file.toPath()));
@@ -24,7 +22,6 @@ public class Blob {
     }
 
     public static void createBlob(String filePath) throws IOException {
-    // Creates a blob and stores the file in the objects directory
         File originalFile = new File(filePath);
         if (!originalFile.exists()) {
             throw new FileNotFoundException("File not found: " + filePath);
@@ -42,15 +39,16 @@ public class Blob {
             Files.copy(originalFile.toPath(), newBlobFile.toPath());
             System.out.println("Blob created: " + uniqueFileName);
         }
-        insertIntoIndexFile(uniqueFileName, originalFile.getPath());
+        insertIntoIndexFile("blob", uniqueFileName, originalFile.getPath());
     }
-    public static void insertIntoIndexFile(String sha1Hash, String originalFilePath) throws IOException {
+
+    public static void insertIntoIndexFile(String type, String sha1Hash, String originalFilePath) throws IOException {
         File indexFile = new File("git/index");
         if (!indexFile.exists() && !indexFile.createNewFile()) {
             throw new IOException("Failed to create index file.");
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(indexFile, true))) {
-            writer.write(sha1Hash + " " + originalFileName);
+            writer.write(type + " " + sha1Hash + " " + originalFilePath);
             writer.newLine();
         }
     }
