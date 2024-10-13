@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -8,14 +9,14 @@ public class BlobTest {
         try {
             for (int i = 0; i < 3; i++) {
                 System.out.println("Blob Test Iteration: " + (i + 1));
-                runBlobTest("testFile.txt");
+                runBlobCreationTest("testFile.txt");
                 System.out.println();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    private static void runBlobTest(String filePath) throws IOException {
+    private static void runBlobCreationTest(String filePath) throws IOException {
         Git.deleteGit();
         Git git = new Git();
         // Create a sample file
